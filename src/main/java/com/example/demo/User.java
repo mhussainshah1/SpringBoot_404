@@ -2,44 +2,45 @@ package com.example.demo;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name="User_Data")
+@Table(name = "User_Data")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name="email", nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
-    @Column(name="first_name")
+    @Column(name = "first_name")
     private String firstName;
 
-    @Column(name="last_name")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "enabled")
     private boolean enabled;
 
-    @Column(name="username")
+    @Column(name = "username")
     private String username;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable( joinColumns = @JoinColumn(name="user_id"),
-                inverseJoinColumns = @JoinColumn(name="role_id"))
+    @JoinTable(joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
     public User() {
     }
 
     public User(String email, String password, String firstName, String lastName, boolean enabled, String username) {
-        this.setEmail(email);;
+        this.setEmail(email);
+        ;
         this.setPassword(password);
         this.setFirstName(firstName);
         this.setLastName(lastName);

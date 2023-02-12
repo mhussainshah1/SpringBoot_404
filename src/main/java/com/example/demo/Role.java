@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 
 @Entity
@@ -9,7 +9,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String role;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
