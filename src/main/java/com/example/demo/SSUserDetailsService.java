@@ -46,7 +46,7 @@ public class SSUserDetailsService implements UserDetailsService {
             GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRole());
             authorities.add(grantedAuthority);
         }
-        System.out.println("User authorities are" + authorities.toString());
+        System.out.println("User authorities are " + authorities);
         return authorities;
     }
 }
