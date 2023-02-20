@@ -1,17 +1,15 @@
 package com.example.demo;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
 
 @Transactional
 @Service
@@ -24,7 +22,7 @@ public class SSUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username){
         try {
             User appUser = userRepository.findByUsername(username);
 
@@ -32,11 +30,11 @@ public class SSUserDetailsService implements UserDetailsService {
                 System.out.println("User not found with the provided username" + appUser.toString());
                 return null;
             }
-            System.out.println("User from username " + appUser);
+            System.out.println("User from username " + appUser.getUsername());
             return org.springframework.security.core.userdetails.User
                     .withUsername(appUser.getUsername())
                     .password(appUser.getPassword())
-                    .roles(getAuthorities1(appUser))
+                    .roles(getAuthorities(appUser))
                     .build();
 
         } catch (Exception e) {
@@ -44,22 +42,13 @@ public class SSUserDetailsService implements UserDetailsService {
         }
     }
 
-    private String[] getAuthorities1(User appUser) {
-        List<String> authorities = new ArrayList<>();
-        for (Role role : appUser.getRoles()) {
-            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role.getRole());
+    private String[] getAuthorities(User appUser) {
+        var authorities = new HashSet<String>();
+        for (var role : appUser.getRoles()) {
+            var grantedAuthority = new SimpleGrantedAuthority(role.getRole());
             authorities.add(grantedAuthority.getAuthority());
         }
         System.out.println("User authorities are " + authorities);
-        return authorities.toArray(new String[0]);
-    }
-
-    private String[] getAuthorities(User appUser) {
-        List<String> roles = new ArrayList<>();
-        for (Role role : appUser.getRoles()) {
-            roles.add(role.getRole());
-        }
-        System.out.println("User authorities are " + roles);
-        return roles.toArray(new String[0]);
+        return Arrays.copyOf(authorities.toArray(),authorities.size(), String[].class);
     }
 }
