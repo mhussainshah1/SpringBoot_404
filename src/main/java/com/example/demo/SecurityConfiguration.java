@@ -47,7 +47,8 @@ public class SecurityConfiguration {
                         .permitAll()
 //                        .hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()
+                )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .failureUrl("/login?error=true")
