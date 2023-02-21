@@ -25,7 +25,8 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    /*    @Bean
+    /*
+    @Bean
         public WebSecurityCustomizer webSecurityCustomizer() {
             return (web) -> web.ignoring()
                     .requestMatchers("/resources/**");
@@ -34,17 +35,15 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/", "/h2-console/**").permitAll()//.hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/admin").hasRole("ADMIN")//.hasAuthority("ROLE_ADMIN")
-                                .anyRequest().authenticated()
+                        .requestMatchers("/", "/h2-console/**").permitAll()//.hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/admin").hasRole("ADMIN")//.hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-//                        .failureUrl("/login?error=true")
+                        .loginPage("/login")//.failureUrl("/login?error=true")
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-//                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutUrl("/logout")//.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
