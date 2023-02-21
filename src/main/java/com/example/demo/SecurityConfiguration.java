@@ -9,10 +9,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -27,17 +25,11 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsServiceBean() {
-        return userDetailsService = new SSUserDetailsService(appUserRepository);
-    }
-
-/*    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring()
-                .requestMatchers("/resources/**");
-    }*/
-
+    /*    @Bean
+        public WebSecurityCustomizer webSecurityCustomizer() {
+            return (web) -> web.ignoring()
+                    .requestMatchers("/resources/**");
+        }*/
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -57,11 +49,22 @@ public class SecurityConfiguration {
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
                 .httpBasic(Customizer.withDefaults())
-                .csrf(CsrfConfigurer::disable);
-        http
-                .headers().frameOptions().disable();
+                .csrf(CsrfConfigurer::disable)
+                .headers(headers -> headers
+                        .frameOptions()
+                        .disable());
 
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationProvider userDetailsService(BCryptPasswordEncoder passwordEncoder) {
+        userDetailsService = new SSUserDetailsService(appUserRepository);
+
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
     }
 
 /*    @Bean
@@ -72,12 +75,4 @@ public class SecurityConfiguration {
                 .and()
                 .build();
     }*/
-
-    @Bean
-    public AuthenticationProvider authenticationProvider() throws Exception{
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
 }
