@@ -38,10 +38,8 @@ public class SSUserDetailsService implements UserDetailsService {
                     .build();
 
         } catch (Exception e) {
-            //throw new UsernameNotFoundException("User not found");
-            e.printStackTrace();
+            throw new UsernameNotFoundException("User not found");
         }
-        return null;
     }
 
     private String[] getAuthorities(User appUser) {
