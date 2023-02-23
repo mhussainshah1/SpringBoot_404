@@ -38,8 +38,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/h2-console/**").permitAll()//.hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin").hasRole("ADMIN")//.hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
 //                .userDetailsService(userDetailsService)
                 .formLogin(form -> form
                         .loginPage("/login")//.failureUrl("/login?error=true")
