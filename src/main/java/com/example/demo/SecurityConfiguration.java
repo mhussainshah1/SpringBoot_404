@@ -38,7 +38,6 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/h2-console/**").permitAll()//.hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/admin").hasRole("ADMIN")//.hasAuthority("ROLE_ADMIN")
-
                         .anyRequest().authenticated()
                 )
 //                .userDetailsService(userDetailsService)
