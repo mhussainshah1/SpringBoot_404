@@ -58,6 +58,15 @@ public class SecurityConfiguration {
         return http.build();
     }
 
+/*    @Bean
+    public AuthenticationProvider userDetailsService(BCryptPasswordEncoder passwordEncoder) {
+        userDetailsService = new SSUserDetailsService(appUserRepository);
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
+    }*/
+
     @Bean
     public AuthenticationManager userDetailsService(HttpSecurity http) throws Exception {
         userDetailsService = new SSUserDetailsService(appUserRepository);
