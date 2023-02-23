@@ -22,7 +22,7 @@ public class SecurityConfiguration {
     private UserRepository appUserRepository;
 
     @Bean
-    public static BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -48,7 +48,8 @@ public class SecurityConfiguration {
                         .logoutUrl("/logout")//.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                         .logoutSuccessUrl("/login?logout")
                         .permitAll())
-                .httpBasic(Customizer.withDefaults())
+                .httpBasic(Customizer.withDefaults());
+        http
                 .csrf(CsrfConfigurer::disable)
                 .headers(headers -> headers
                         .frameOptions()
@@ -68,7 +69,6 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationManager userDetailsService(HttpSecurity http) throws Exception {
-        userDetailsService = new SSUserDetailsService(appUserRepository);
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder())
